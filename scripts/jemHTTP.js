@@ -40,7 +40,8 @@ class jemHTTP {
      */
     async request(method, route = { path: "", params: { }, query:{ } }, data = null) {
         let url = this.url + this.constructEndpoint(route.path, route.params, route.query);
-
+        console.log(`GIVEN URL: ${url}`);
+        //sets the current fetch option properly
         const options = {
             method: method.toUpperCase()
         };
@@ -48,15 +49,19 @@ class jemHTTP {
         if (data && ["POST", "PUT", "PATCH"].includes(options.method))
             options.body = JSON.stringify(data);
 
+
         try {
+            
             const response = await fetch(url, options);
 
-            if (!response.ok)
-                throw new Error("HTTP error ${response.status}: ${response.statusText}");
+            console.log(`response status:${response.ok}`)
+            if (!(response.ok))
+                throw new Error(`HTTP error ${response.status}: ${response.statusText}`);
 
             return await response.json();
         }
         catch (error) {
+            console.log(error.message);
             return { error: error.message };
         }
     }
@@ -78,7 +83,7 @@ class jemHTTP {
 
         // URLSearchParams is a standard API function to convert a list of queries into a formatted string "safely".
         //
-        const queryString = URLSearchParams(query).toString();
+        const queryString = new URLSearchParams(query).toString();
 
         return queryString ? "${path}?${queryString}" : path;
     }

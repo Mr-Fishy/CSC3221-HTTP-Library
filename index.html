@@ -20,6 +20,7 @@
             <input type="url" id="route" value="https://jsonplaceholder.typicode.com/users" required />
         </section>
 
+        </section>
         <section id="reqSection">
             <legend>Choose which type of HTTP request to send:</legend>
 
@@ -34,6 +35,14 @@
             <input type="submit" value="SEND" id="sendReq" />
         </section>
 
+        <section id ="dropdownSelection">
+            <label for="dropdown">Filterable Categories:</label>
+            <!--THIS IS AN EMPTY dropdown initially, it requires a request to succeed.-->
+            <select name = "dropdown" id = "dropdown">
+                <option value = "" selected disabled>Choose filter</option>
+            </select>
+        </section>
+        
         <section id="respSection">
             <p><strong>Response:</strong></p>
             <div id="response"></div>
