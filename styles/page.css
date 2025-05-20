@@ -1,0 +1,60 @@
+body{
+    text-align: center;
+    background-color: rgb(54, 50, 50);
+}
+
+h1{
+    margin: auto+30px;
+    background-color: yellowgreen;
+}
+
+section{
+    padding: 10px 10px;
+    margin: auto+10px;
+    display: grid;
+    text-align: left;
+}
+
+label{
+    margin: auto+5px;
+    text-align: left;
+    background-color:yellowgreen;
+}
+
+label + #route{
+    margin: auto+5px;
+    text-align: left;
+}
+
+#inputs{
+    background-color: rgb(129, 222, 191);
+}
+
+legend{
+    background-color: yellowgreen;
+}
+
+p{
+    margin: auto+30px;
+    text-align: left;
+    background-color: yellowgreen;
+}
+
+p + div{
+    background-color: rgb(129, 222, 191);
+    border: 1px;
+    margin: auto+45px;
+    text-align: left;
+}
+
+html{
+    display: flexbox;
+    align-self: center;
+}
+
+fieldset{
+    padding: 10px;
+    align-self: center;
+    background-color:rgb(129, 222, 191);
+    margin: auto+30px;
+}
