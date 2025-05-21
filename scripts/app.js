@@ -24,16 +24,13 @@ document.querySelector("#dropdown").addEventListener("change",(e)=>{
     const selected_dropdown = e.target.value;
     let values = [];
     applyFilter(oldResponse,selected_dropdown,values);
-
-
-
     let html = "<ol>"
     for(const items of values){
-        console.log(`item: ${items}`)
         html+= "<li>"+items+"</li>";
     }
     html+="</ol>"
     document.querySelector("#response").innerHTML = html;
+
 });
 
 /**
@@ -79,7 +76,6 @@ function applyFilter(object,filter,listSet){
         
         if(object[key] === object[filter]){
             if(typeof object[key] === 'object'){
-                console.log("THEY ARE OBJECTS");
                 //this is quite silly for formatting
                 listSet.push((JSON.stringify(object[key],null,'\t'))
                   .replaceAll('{', ' ')
@@ -107,7 +103,7 @@ function applyFilter(object,filter,listSet){
  */
 async function sendRequest(reqType, url) {
 
-    console.log("Request Sent! Type: " + reqType + " Route: " + url);
+    //console.log("Request Sent! Type: " + reqType + " Route: " + url);
 
     jem.setUrl(url);
 
@@ -118,12 +114,15 @@ async function sendRequest(reqType, url) {
     listOptions.clear();
     getFilters(response,listOptions);
 
+
     //reset the document every time, necessary when updating the page.
     document.querySelector("#dropdown").innerHTML = "";
     for(const option of listOptions){
+        if(option === 'error'){
+            document.querySelector("#response").innerHTML = `${response.error} ${url}`;
+        }
         document.querySelector("#dropdown").innerHTML += "<option>"+option+"</option>";
     }
 
-    document.querySelector("#dropdown").selected_dropdown
 }
 
