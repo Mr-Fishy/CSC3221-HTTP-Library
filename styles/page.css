@@ -1,65 +1,84 @@
-body{
-    text-align: center;
-    background-color: rgb(54, 50, 50);
+body {
+    margin: 0px auto;
 
+    width: auto;
+    max-width: 600px;
+    padding: 0px 32px;
+
+    display: flex;
+    flex-direction: column;
+
+    font-family: sans-serif;
 }
 
-h1{
-    margin: auto+30px;
-    background-color: yellowgreen;
+section {
+    display: flex;
+    flex-direction: column;
 }
 
-section{
-    padding: 10px 10px;
-    margin: auto+10px;
-    display: grid;
-    text-align: left;
+label {
+    padding: 16px 0px 8px;
 }
 
-label{
-    margin: auto+5px;
-    text-align: left;
-    background-color:yellowgreen;
+textarea {
+    resize: vertical;
+
+    min-height: 48px;
 }
 
-label + #route{
-    margin: auto+5px;
-    text-align: left;
+input {
+    min-height: 24px;
 }
 
-#inputs{
-    background-color: rgb(129, 222, 191);
+input[type="radio"] {
+    display: none;
 }
 
-legend{
-    background-color: yellowgreen;
+input[type="radio"]:checked + label {
+    background-color: lightgray;
 }
 
-p{
-    margin: auto+30px;
-    text-align: left;
-    background-color: yellowgreen;
+input[type="radio"]:hover + label {
+    background-color: cornflowerblue;
 }
 
-p + div{
-    background-color: rgb(129, 222, 191);
-    border: 1px;
-    margin: auto+45px;
-    text-align: left;
+#reqSection {
+    display: flex;
+    flex-direction: row;
 }
 
-html{
-    display: flexbox;
-    align-self: center;
+#reqSection > label {
+    cursor: pointer;
+
+    display: inline-block;
+    margin-right: 0.2rem;
+    padding: 0.5rem 1rem;
 }
 
-input:invalid{
-    border: 2px solid red;
+#submitSection > input {
+    max-width: 160px;
+    min-width: 80px;
+    height: 32px;
+
+    margin: 16px 0px 0px;
 }
 
-fieldset{
-    padding: 10px;
-    align-self: center;
-    background-color:rgb(129, 222, 191);
-    margin: auto+30px;
+#sendReq {
+    border: none;
+    cursor: pointer;
+
+    background-color: lightgray;
+}
+
+#sendReq:hover {
+    background-color: cornflowerblue;
+}
+
+#response {
+    font-family: monospace;
+
+    background-color: aliceblue;
+    padding: 8px;
+
+    overflow-x: auto;
 }

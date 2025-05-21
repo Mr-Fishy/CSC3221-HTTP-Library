@@ -1,9 +1,20 @@
-const jem = new jemHTTP;
-var oldResponse;
+const routeIn = document.querySelector("#route");
+const endpointIn = document.querySelector("#endpoint");
+const queryIn = document.querySelector("#query");
+const bodyIn = document.querySelector("#body");
 
-document.querySelector("#sendReq").addEventListener("click", (e) => {
+const sendIn = document.querySelector("#sendReq");
+
+const responseOut = document.querySelector("#response");
+
+const jem = new jemHTTP(routeIn.value);
+
+/**
+ * Adds an event listener to send a request when the submit
+ * button is clicked.
+ */
+sendIn.addEventListener("click", (e) => {
     const radioButtons = document.querySelectorAll('input[name="HTTPtype"');
-    const route = document.querySelector("#route").value;
 
     let reqType;
     for (const button of radioButtons) {
@@ -12,29 +23,29 @@ document.querySelector("#sendReq").addEventListener("click", (e) => {
             break;
         }
     }
-    sendRequest(reqType, route);
+
+    sendRequest(reqType);
     e.preventDefault();
 });
 
 /**
- * This function does not take any inputs other than the events on the html page.
+ * Adds an event listener to update jem's base url given a time
+ * has past since the last input to the route.
  */
-document.querySelector("#dropdown").addEventListener("click",(e)=>{
-    console.log(`SELECTED: ${e.target.value}`);
-    const selected_dropdown = e.target.value;
-    let values = [];
-    applyFilter(oldResponse,selected_dropdown,values);
-    let html = "<ol>"
-    for(const items of values){
-        html+= "<li>"+items+"</li>";
-    }
-    html+="</ol>"
-    document.querySelector("#response").innerHTML = html;
+routeIn.addEventListener("input", function() {
+    if (routeIn.handle)
+        clearTimeout(routeIn.handle);
 
+    handle = setTimeout(() => {
+        jem.setURL(routeIn.value);
+
+        routeIn.handle = null;
+    }, 100);
+
+    input.data("handle", handle);
 });
 
 /**
- * 
  * @param {*} object A JSON object that will be traversed and have all its keys read
  * @param {*} listSet Where the result of the operation lands
  * 
@@ -54,9 +65,7 @@ function getFilters(object,listSet){
     }
 }
 
-
 /**
- * 
  * @param {*} object this is a json object which will have filters applied to it 
  * @param {*} filter this is the filter/key that will be used to determine the current value
  * @param {*} listSet this is where the result will be stored
@@ -93,40 +102,48 @@ function applyFilter(object,filter,listSet){
     }
 }
 
-
 /**
  * 
- * @param {*} reqType The type of request being made to endpoint
+ * @param { string } reqType The type of request being made to endpoint
  * IE: GET, POST, PUT, DELETE and PATCH.
- * 
- * @param {*} url The place where the resource should be fetched from.
  */
-async function sendRequest(reqType, url) {
+async function sendRequest(reqType) {
+    let query = { };
+    try {
+        query = queryIn.value ? JSON.parse(queryIn.value) : { };
+    } catch (e) {
+        responseOut.innerHTML = 'Invalid JSON in Query Parameters!';
 
-    //console.log("Request Sent! Type: " + reqType + " Route: " + url);
-
-    jem.setUrl(url);
-
-    let response = await jem.request(reqType);
-    oldResponse = response;
-
-    const listOptions = new Set();
-    listOptions.clear();
-    getFilters(response,listOptions);
-
-
-    //reset the document every time, necessary when updating the page.
-    document.querySelector("#dropdown").innerHTML = "";
-    console.log(listOptions.size);
-    if(listOptions.size == 1){
-        document.querySelector("#response").innerHTML = `${JSON.stringify(response)}`;
-    }
-    for(const option of listOptions){
-        if(option === 'error'){
-            document.querySelector("#response").innerHTML = `${response.error} ${url}`;
-        }
-        document.querySelector("#dropdown").innerHTML += "<option>"+option+"</option>";
+        return;
     }
 
+    let data = { };
+    try {
+        data = bodyIn.value ? JSON.parse(bodyIn.value) : { };
+    } catch (e) {
+        responseOut.innerHTML = 'Invalid JSON in Request Body!';
+
+        return;
+    }
+
+    const method = reqType.toLowerCase();
+    const route = {
+        path: endpointIn.value,
+        query: query
+    };
+
+    responseOut.innerHTML = "";
+
+    try {
+        let response;
+
+        if (["patch", "post", "put"].includes(method))
+            response = await jem[method](route, data);
+        else
+            response = await jem[method](route);
+
+        responseOut.innerHTML = `${JSON.stringify(response, null, 2)}`;
+    } catch (e) {
+        responseOut.innerHTML = `Error: ${error}`;
+    }
 }
-

@@ -1,5 +1,7 @@
 # CSC3221-HTTP-Library
 
+Group #1
+
 ## Progress
 
 - [x] Create library API as a Class.
@@ -12,20 +14,12 @@
   - [x] PUT
   - [x] DELETE
   - [x] PATCH
-- [ ] Routes, Parameters, and Queries support
+- [x] Routes, Parameters, and Queries support
   - [x] Routes
-  - [ ] Parameters
-  - [ ] Queries
-- [ ] Implement app.js to enable API use from the webpage.
-- [ ] Prettify the webpage.
-
-## TODO
-
-- Implement `sendRequest` function in app.js.
-- Add `Process` functions to app.js for handling requests.
-- Finish UI mvp to support parameter and query inputs.
-- CSS
-- Figure out what "error handling" means, currently errors are simply reported.
+  - [x] Parameters
+  - [x] Queries
+- [x] Implement app.js to enable API use from the webpage.
+- [x] Prettify the webpage.
 
 ## Netcentric Computing Lab
 

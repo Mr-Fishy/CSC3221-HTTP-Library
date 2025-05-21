@@ -32,36 +32,31 @@ class jemHTTP {
      * @param { string } method The HTTP method to request (GET, POST, PUT, PATCH, DELETE).
      * @param { Object } [route] An object containing the endpoint data to route from the base url.
      * @param { string } [route.path] The endpoint path, e.g., "/users/:id".
-     * @param { Object.<string, string | number> } [route.params={ }] Route parameters to replace in the path.
      * @param { Object.<string, string | number | boolean> } [route.query={ }] Query parameters to append to the path.
      * @param { Object | null } [data=null] JSON data for methods like POST, PUT, and PATCH.
      * 
      * @returns { Promise<Object> } The JSON response object or error.
      */
-    async request(method, route = { path: "", params: { }, query:{ } }, data = null) {
-        let url = this.url + this.constructEndpoint(route.path, route.params, route.query);
-        console.log(`GIVEN URL: ${url}`);
+    async request(method, route = { path: "", query:{ } }, data = null) {
+        let url = this.url + this.constructEndpoint(route.path, route.query);
         //sets the current fetch option properly
         const options = {
-            method: method.toUpperCase()
+            method: method.toUpperCase(),
+            headers: { "Content-Type": "application/json" },
         };
 
         if (data && ["POST", "PUT", "PATCH"].includes(options.method))
             options.body = JSON.stringify(data);
 
-
         try {
-            
             const response = await fetch(url, options);
 
-            console.log(`response status:${response.ok}`)
             if (!(response.ok))
                 throw new Error(`HTTP error ${response.status}: ${response.statusText}`);
 
             return await response.json();
         }
         catch (error) {
-            console.log(error.message);
             return { error: error.message };
         }
     }
@@ -70,22 +65,14 @@ class jemHTTP {
      * Converts the given parameters and queries into a formatted url endpoint.
      * 
      * @param { string } endpoint The tailing endpoint of the url.
-     * @param { Object.<string, string | number> } params A list of parameters for the url endpoint.
      * @param { Object.<string, string | number | boolean> } query A list of queries for the url endpoint.
      * 
      * @returns { string } A formatted endpoint for the url.
      */
-    constructEndpoint(endpoint, params, query) {
-        let path = endpoint;
-
-        for (const key in params)
-            path = path.replace(":${key}", params[key]);
-
-        // URLSearchParams is a standard API function to convert a list of queries into a formatted string "safely".
-        //
+    constructEndpoint(endpoint, query) {
         const queryString = new URLSearchParams(query).toString();
 
-        return queryString ? "${path}?${queryString}" : path;
+        return queryString ? `${endpoint}?${queryString}` : endpoint;
     }
 };
 
@@ -94,12 +81,11 @@ class jemHTTP {
  * 
  * @param { Object } [route] An object containing the endpoint data to route from the base url.
  * @param { string } [route.path] The endpoint path, e.g., "/users/:id".
- * @param { Object.<string, string | number> } [route.params={ }] Route parameters to replace in the path.
  * @param { Object.<string, string | number | boolean> } [route.query={ }] Query parameters to append to the path.
  * 
  * @returns { Promise<Object> } JSON response object or error.
  */
-jemHTTP.prototype.get = function (route = { path: "", params: { }, query:{ } })
+jemHTTP.prototype.get = function (route = { path: "", query:{ } })
     { return this.request("GET", route); }
 
 /**
@@ -107,13 +93,12 @@ jemHTTP.prototype.get = function (route = { path: "", params: { }, query:{ } })
  * 
  * @param { Object } [route] An object containing the endpoint data to route from the base url.
  * @param { string } [route.path] The endpoint path, e.g., "/users/:id".
- * @param { Object.<string, string | number> } [route.params={ }] Route parameters to replace in the path.
  * @param { Object.<string, string | number | boolean> } [route.query={ }] Query parameters to append to the path.
  * @param { Object } data The JSON data to send.
  * 
  * @returns { Promise<Object> } JSON response object or error.
  */
-jemHTTP.prototype.post = function (route = { path: "", params: { }, query:{ } }, data)
+jemHTTP.prototype.post = function (route = { path: "", query:{ } }, data)
     { return this.request("POST", route, data); }
 
 /**
@@ -121,13 +106,12 @@ jemHTTP.prototype.post = function (route = { path: "", params: { }, query:{ } },
  * 
  * @param { Object } [route] An object containing the endpoint data to route from the base url.
  * @param { string } [route.path] The endpoint path, e.g., "/users/:id".
- * @param { Object.<string, string | number> } [route.params={ }] Route parameters to replace in the path.
  * @param { Object.<string, string | number | boolean> } [route.query={ }] Query parameters to append to the path.
  * @param { Object } data The JSON data to send.
  * 
  * @returns { Promise<Object> } JSON response object or error.
  */
-jemHTTP.prototype.put = function (route = { path: "", params: { }, query:{ } }, data)
+jemHTTP.prototype.put = function (route = { path: "", query:{ } }, data)
     { return this.request("PUT", route, data); }
 
 /**
@@ -135,13 +119,12 @@ jemHTTP.prototype.put = function (route = { path: "", params: { }, query:{ } }, 
  * 
  * @param { Object } [route] An object containing the endpoint data to route from the base url.
  * @param { string } [route.path] The endpoint path, e.g., "/users/:id".
- * @param { Object.<string, string | number> } [route.params={ }] Route parameters to replace in the path.
  * @param { Object.<string, string | number | boolean> } [route.query={ }] Query parameters to append to the path.
  * @param { Object } data The JSON data to send.
  * 
  * @returns { Promise<Object> } JSON response object or error.
  */
-jemHTTP.prototype.patch = function (route = { path: "", params: { }, query:{ } }, data)
+jemHTTP.prototype.patch = function (route = { path: "", query:{ } }, data)
     { return this.request("PATCH", route, data); }
 
 /**
@@ -149,11 +132,10 @@ jemHTTP.prototype.patch = function (route = { path: "", params: { }, query:{ } }
  * 
  * @param { Object } [route] An object containing the endpoint data to route from the base url.
  * @param { string } [route.path] The endpoint path, e.g., "/users/:id".
- * @param { Object.<string, string | number> } [route.params={ }] Route parameters to replace in the path.
  * @param { Object.<string, string | number | boolean> } [route.query={ }] Query parameters to append to the path.
  * 
  * @returns { Promise<Object> } JSON response object or error.
  */
-jemHTTP.prototype.delete = function (route = { path: "", params: { }, query:{ } })
+jemHTTP.prototype.delete = function (route = { path: "", query:{ } })
     { return this.request("DELETE", route); }
 

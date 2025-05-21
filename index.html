@@ -9,51 +9,53 @@
     <title>JEM HTTP</title>
 
     <link rel="icon" href = "https://static.stereogum.com/uploads/2012/11/tim_allen-compressed.jpg" />
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css" />
     <link rel="stylesheet" href="./styles/page.css" />
 
 
 </head>
 <body>
 
-    <div>
-        <h1>JEM Fetch with Promises</h1>
+    <h1>JEM Client Tester</h1>
 
-        <section id="routeSection">
-            <label for="route">Route:</label>
-            <input type="url" id="route" value="https://jsonplaceholder.typicode.com/users" required />
-        </section>
+    <section id="reqSection">
+        <input type="radio" name="HTTPtype" id="get" value="get" checked />
+        <label for="get">GET</label>
 
-        </section>
-        <section id="reqSection">
-            <fieldset>
-                <legend>Choose which type of HTTP request to send:</legend>
+        <input type="radio" name="HTTPtype" id="post" value="post" />
+        <label for="post">POST</label>
 
-                <label id = "inputs">
-                    <input type="radio" name="HTTPtype" value="get" checked />GET
-                    <input type="radio" name="HTTPtype" value="post" />POST
-                    <input type="radio" name="HTTPtype" value="put" />PUT
-                    <input type="radio" name="HTTPtype" value="delete" />DELETE
-                    <input type="radio" name="HTTPtype" value="patch" />PATCH
-                </label>
+        <input type="radio" name="HTTPtype" id="put" value="put" />
+        <label for="put">PUT</label>
 
-                <input type="submit" value="SEND" id="sendReq" />
-            </fieldset>
-        </section>
+        <input type="radio" name="HTTPtype" id="delete" value="delete" />
+        <label for="delete">DELETE</label>
 
-        <section id ="dropdownSelection">
-            <label for="dropdown">Filterable Categories:</label>
-            <!--THIS IS AN EMPTY dropdown initially, it requires a request to succeed.-->
-            <select name = "dropdown" id = "dropdown">
-                <option value = "" selected disabled>Choose filter</option>
-            </select>
-        </section>
-        
-        <section id="respSection">
-            <p><strong>Response:</strong></p>
-            <div id="response"></div>
-        </section>
-    </div>
+        <input type="radio" name="HTTPtype" id="patch" value="patch" />
+        <label for="patch">PATCH</label>
+    </section>
+
+    <section id="routeSection">
+        <label for="route">Route:</label>
+        <input type="url" id="route" value="https://jsonplaceholder.typicode.com" required />
+
+        <label for="endpoint">Endpoint:</label>
+        <input type="text" id="endpoint" value="/users" required />
+
+        <label for="query">Query Params (JSON):</label>
+        <textarea id="query" placeholder='{ "id": "0" }'></textarea>
+
+        <label for="body">Data Body (JSON):</label>
+        <textarea id="body" placeholder='{ name : "New User" }'></textarea>
+    </section>
+
+    <section id="submitSection">
+        <input type="submit" value="SEND" id="sendReq" />
+    </section>
+
+    <section id="respSection">
+        <p><strong>Response:</strong></p>
+        <pre id="response">{ }</pre>
+    </section>
 
 </body>
 
