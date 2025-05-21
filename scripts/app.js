@@ -24,15 +24,11 @@ document.querySelector("#dropdown").addEventListener("change",(e)=>{
     const selected_dropdown = e.target.value;
     let values = [];
     applyFilter(oldResponse,selected_dropdown,values);
-
-
-
     let html = "<ol>"
     for(const items of values){
         html+= "<li>"+items+"</li>";
     }
     html+="</ol>"
-    console.log(e.target.value);
     document.querySelector("#response").innerHTML = html;
 
 });
@@ -80,7 +76,6 @@ function applyFilter(object,filter,listSet){
         
         if(object[key] === object[filter]){
             if(typeof object[key] === 'object'){
-                console.log("THEY ARE OBJECTS");
                 //this is quite silly for formatting
                 listSet.push((JSON.stringify(object[key],null,'\t'))
                   .replaceAll('{', ' ')
@@ -108,12 +103,11 @@ function applyFilter(object,filter,listSet){
  */
 async function sendRequest(reqType, url) {
 
-    console.log("Request Sent! Type: " + reqType + " Route: " + url);
+    //console.log("Request Sent! Type: " + reqType + " Route: " + url);
 
     jem.setUrl(url);
 
     let response = await jem.request(reqType);
-    console.log("request recieved");
     oldResponse = response;
 
     const listOptions = new Set();
