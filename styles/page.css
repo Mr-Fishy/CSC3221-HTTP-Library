@@ -31,10 +31,6 @@ label + #route{
     background-color: rgb(129, 222, 191);
 }
 
-#inputs > input{
-    display: block;
-}
-
 legend{
     background-color: yellowgreen;
 }
