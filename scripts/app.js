@@ -29,11 +29,12 @@ document.querySelector("#dropdown").addEventListener("change",(e)=>{
 
     let html = "<ol>"
     for(const items of values){
-        console.log(`item: ${items}`)
         html+= "<li>"+items+"</li>";
     }
     html+="</ol>"
+    console.log(e.target.value);
     document.querySelector("#response").innerHTML = html;
+
 });
 
 /**
@@ -112,18 +113,22 @@ async function sendRequest(reqType, url) {
     jem.setUrl(url);
 
     let response = await jem.request(reqType);
+    console.log("request recieved");
     oldResponse = response;
 
     const listOptions = new Set();
     listOptions.clear();
     getFilters(response,listOptions);
 
+
     //reset the document every time, necessary when updating the page.
     document.querySelector("#dropdown").innerHTML = "";
     for(const option of listOptions){
+        if(option === 'error'){
+            document.querySelector("#response").innerHTML = `${response.error} ${url}`;
+        }
         document.querySelector("#dropdown").innerHTML += "<option>"+option+"</option>";
     }
 
-    document.querySelector("#dropdown").selected_dropdown
 }
 
