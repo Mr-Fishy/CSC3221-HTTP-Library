@@ -19,7 +19,7 @@ document.querySelector("#sendReq").addEventListener("click", (e) => {
 /**
  * This function does not take any inputs other than the events on the html page.
  */
-document.querySelector("#dropdown").addEventListener("change",(e)=>{
+document.querySelector("#dropdown").addEventListener("click",(e)=>{
     console.log(`SELECTED: ${e.target.value}`);
     const selected_dropdown = e.target.value;
     let values = [];
@@ -117,6 +117,10 @@ async function sendRequest(reqType, url) {
 
     //reset the document every time, necessary when updating the page.
     document.querySelector("#dropdown").innerHTML = "";
+    console.log(listOptions.size);
+    if(listOptions.size == 1){
+        document.querySelector("#response").innerHTML = `${JSON.stringify(response)}`;
+    }
     for(const option of listOptions){
         if(option === 'error'){
             document.querySelector("#response").innerHTML = `${response.error} ${url}`;
